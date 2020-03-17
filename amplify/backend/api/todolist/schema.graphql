@@ -1,0 +1,6 @@
+type Todo @model {
+  id: String!
+  name: String!
+  level: Int!
+  description: String
+}

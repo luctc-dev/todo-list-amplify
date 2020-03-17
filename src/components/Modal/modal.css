@@ -1,0 +1,73 @@
+.tcl-modal-wrapper {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-family: sans-serif;
+  opacity: 0;
+  visibility: hidden;
+}
+.tcl-modal-wrapper.show {
+  opacity: 1;
+  visibility: visible;
+}
+.tcl-modal-wrapper .tcl-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.tcl-modal-content {
+  /* width: 700px; */
+  background-color: #fff;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transform: translate(-50%, 0) scale(1.2);
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+.tcl-modal-open .tcl-modal-content {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+.tcl-modal-body {
+  padding: 20px;
+}
+.tcl-modal-header {
+  position: relative;
+  padding: 15px 20px 10px 20px;
+  border-bottom: 1px solid #ccc;
+}
+.tcl-modal-footer {
+  padding: 10px 20px;
+  border-top: 1px solid #ccc;
+  text-align: right;
+}
+
+.tcl-modal-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 14px 17px;
+  cursor: pointer;
+}
+body.tcl-modal-open {
+  overflow: hidden;
+}
+.tcl-dialog {
+  position: relative;
+}
