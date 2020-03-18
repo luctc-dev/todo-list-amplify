@@ -3,25 +3,12 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { listTodos } from '../graphql/queries';
 import { createTodo, updateTodo, deleteTodo } from '../graphql/mutations';
 
-// setTimeout(() => {
-// 	Auth.signUp({
-// 		username: 'conglucdemo',
-// 		password: '123456ABCDEF@',
-// 		attributes: {
-// 			// email,          // optional
-// 			// phone_number,   // optional - E.164 number convention
-// 			// other custom attributes 
-// 		},
-// 		validationData: []  //optional
-// 	})
-// 		.then(data => console.log(data))
-// 		.catch(err => console.log(err));
-// }, 5000);
-
 export default {
-	getDataAsync: async () => {
+	getDataAsync: async ({ limit, nextToken }) => {
 		try {
-			const todoData = await API.graphql(graphqlOperation(listTodos));
+			const variables = { limit };
+			if (nextToken) variables.nextToken = nextToken
+			const todoData = await API.graphql(graphqlOperation(listTodos, variables));
 			return {
 				ok: true,
 				data: todoData.data.listTodos

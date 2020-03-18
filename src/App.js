@@ -9,6 +9,7 @@ import { onCreateTodo, onDeleteTodo, onUpdateTodo } from './graphql/subscription
 
 // Local
 import Header from './components/Header';
+import Button from './components/Button';
 import Control from './components/Control';
 import ListTasksTable from './components/ListTasksTable';
 
@@ -17,10 +18,12 @@ import todoServices from './services/todos';
 import { LIST_TASK_KEY } from './constants';
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [orderBy, setOrderBy] = useState('name');
   const [orderDir, setOrderDir] = useState('asc');
   const [searchText, setSearchText] = useState('');
   const [listTasks, setListTasks] = useState([]);
+  const [nextTokenGetList, setNextTokenGetList] = useState('');
 
   // Subscribe Create
   useEffect(() => {
@@ -77,9 +80,11 @@ function App() {
   }, [listTasks])
 
   useEffect(() => {
-    todoServices.getDataAsync().then(res => {
+    const limit = 2;
+    todoServices.getDataAsync({ limit, nextToken: '' }).then(res => {
       if (res.ok && res.data && res.data.items && res.data.items.length) {
         setListTasks(res.data.items);
+        setNextTokenGetList(res.data.nextToken);
       }
     })
   }, [])
@@ -97,6 +102,26 @@ function App() {
     setSearchText(text);
   }
 
+  function handleLoadmoreTaskByNextToken() {
+    const limit = 2;
+    const nextToken = nextTokenGetList;
+    console.log("nextToken = ", nextToken);
+    if (nextToken && !loading) {
+      setLoading(true);
+      todoServices.getDataAsync({ limit, nextToken })
+        .then(res => {
+          if (res.ok && res.data && res.data.items && res.data.items.length) {
+            setListTasks([
+              ...listTasks,
+              ...res.data.items
+            ]);
+          }
+          setNextTokenGetList(res.data.nextToken);
+          setLoading(false);
+        })
+    }
+  }
+
   function handleAddNewTask({ id, name, level }) {
     todoServices.createTask({ id, name, level }).then(res => {
       if (res.ok) {
@@ -104,7 +129,6 @@ function App() {
         setListTasks([...listTasks]);
       }
     })
-
   }
 
   function handleDeleteTask(taskDelete, callback) {
@@ -176,6 +200,12 @@ function App() {
         handleEditTask={handleEditTask}
         handleDeleteTask={handleDeleteTask}
       />
+      <Button
+        loading={loading}
+        onClick={() => {
+          handleLoadmoreTaskByNextToken()
+        }}
+        className="btn btn-primary">Load more</Button>
     </Container>
   );
 }
@@ -183,3 +213,18 @@ function App() {
 export default withAuthenticator(App, {
   includeGreetings: true
 });
+
+
+// query GetTodo {
+//   listTodos(filter: {
+//     level: {
+//       between: [0, 1]
+//     }
+//   } ) {
+//     items {
+//       id
+//       name
+//       level
+//     }
+//   }
+// }
