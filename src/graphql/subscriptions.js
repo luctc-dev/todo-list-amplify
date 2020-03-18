@@ -7,6 +7,7 @@ export const onCreateTodo = /* GraphQL */ `
       id
       name
       level
+      createdAt
       description
     }
   }
@@ -17,6 +18,7 @@ export const onUpdateTodo = /* GraphQL */ `
       id
       name
       level
+      createdAt
       description
     }
   }
@@ -27,6 +29,7 @@ export const onDeleteTodo = /* GraphQL */ `
       id
       name
       level
+      createdAt
       description
     }
   }

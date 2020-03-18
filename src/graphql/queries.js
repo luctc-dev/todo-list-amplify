@@ -7,6 +7,7 @@ export const getTodo = /* GraphQL */ `
       id
       name
       level
+      createdAt
       description
     }
   }
@@ -22,6 +23,7 @@ export const listTodos = /* GraphQL */ `
         id
         name
         level
+        createdAt
         description
       }
       nextToken

@@ -105,7 +105,6 @@ function App() {
   function handleLoadmoreTaskByNextToken() {
     const limit = 2;
     const nextToken = nextTokenGetList;
-    console.log("nextToken = ", nextToken);
     if (nextToken && !loading) {
       setLoading(true);
       todoServices.getDataAsync({ limit, nextToken })
